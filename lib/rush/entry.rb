@@ -97,7 +97,7 @@ class Rush::Entry
 	# Copy the entry to another dir.  Returns an object representing the new
 	# copy.
 	def copy_to(dir)
-		raise NotADir unless dir.class == Rush::Dir
+		raise Rush::NotADir unless dir.class == Rush::Dir
 
 		if box == dir.box
 			connection.copy(full_path, dir.full_path)
