@@ -70,4 +70,15 @@ describe Rush::Process do
 		other = Rush::Process.new({ :pid => @process.pid }, @process.box)
 		@process.should == other
 	end
+
+	it "can send a signal" do
+		process = Rush.bash("trap '' SIGHUP ; sleep 30", :background => true)
+		process.alive?.should be_true
+		process.signal('SIGHUP')
+		sleep 0.1
+		process.alive?.should be_true
+		process.signal('SIGKILL')
+		timeout(10) { sleep 0.1 while process.alive? }
+		process.alive?.should be_false
+	end
 end

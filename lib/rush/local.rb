@@ -307,6 +307,10 @@ class Rush::Connection::Local
 		# if it's dead, great - do nothing
 	end
 
+	def signal_process(pid, signal)
+		::Process.kill(signal, pid)
+	end
+
 	def bash(command, user=nil, background=false, reset_environment=false)
 		return bash_background(command, user, reset_environment) if background
 
