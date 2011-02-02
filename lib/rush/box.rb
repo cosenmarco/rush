@@ -116,7 +116,7 @@ class Rush::Box
 		else
 			if @drb.nil?
 				DRb.start_service # FIXME: are we listening on a port? why?
-				@drb = DRbObject.new_with_uri("drbssh://#{self.host}/vagrant/rush/bin/rushd")
+				@drb = DRbObject.new_with_uri("drbssh://#{self.host}/rushd")
 			end
 			@drb.connection
 		end

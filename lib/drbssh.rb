@@ -26,7 +26,7 @@ module DRb
 
 
     def self.parse_uri(uri)
-      if uri.match('^drbssh://([^/]+)(/.+)$')
+      if uri.match('^drbssh://([^/]+)/(.+)$')
         [ $1, $2 ]
       else
         raise DRbBadScheme,uri unless uri =~ /^drbssh:/
