@@ -98,7 +98,11 @@ class Rush::Box
 	# This is called automatically the first time an action is invoked, but you
 	# may wish to call it manually ahead of time in order to have the tunnel
 	# already set up and running.
+<<<<<<< HEAD
 	def establish_connection()
+=======
+	def establish_connection(options={})
+>>>>>>> use DRb over SSH instead of an HTTP tunnel
 		connection
 	end
 
