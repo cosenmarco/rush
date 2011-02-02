@@ -63,4 +63,9 @@ describe Rush::Box do
 		@box.connection.should_receive(:alive?).and_return(true)
 		@box.should be_alive
 	end
+
+	it "establish_connection to set up the connection manually" do
+		@box.should_receive(:connection)
+		@box.establish_connection
+	end
 end
