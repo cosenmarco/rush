@@ -137,12 +137,17 @@ class Rush::Connection::Local
 
 	# Get the list of processes as an array of hashes.
 	def processes
-		if ::File.directory? "/proc"
-			resolve_unix_uids(linux_processes)
-		elsif ::File.directory? "C:/WINDOWS"
+		if ::File.directory? "C:/WINDOWS"
 			windows_processes
 		else
-			os_x_processes
+			os = `uname -s`.chomp
+			if os == "Linux"
+				resolve_unix_uids(linux_processes)
+			elsif os == "Darwin" or os == "FreeBSD"
+				os_x_processes
+			else
+				[]
+			end
 		end
 	end
 
