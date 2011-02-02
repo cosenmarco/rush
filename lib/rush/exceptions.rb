@@ -2,12 +2,6 @@ module Rush
 	# Base class for all rush exceptions.
 	class Exception < ::RuntimeError; end
 
-	# rushd is not running on the remote box.
-	class RushdNotRunning < Exception; end
-
-	# An unrecognized status code was returned by rushd.
-	class FailedTransmit < Exception; end
-
 	# The entry (file or dir) referenced does not exist.  Message is the entry's full path.
 	class DoesNotExist < Exception; end
 
