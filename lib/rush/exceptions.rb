@@ -2,9 +2,6 @@ module Rush
 	# Base class for all rush exceptions.
 	class Exception < ::RuntimeError; end
 
-	# Client was not authorized by remote server; check credentials.
-	class NotAuthorized < Exception; end
-
 	# rushd is not running on the remote box.
 	class RushdNotRunning < Exception; end
 
