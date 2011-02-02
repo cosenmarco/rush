@@ -11,6 +11,8 @@
 #   local.processes
 #
 class Rush::Box
+	include DRbUndumped
+
 	attr_reader :host
 
 	# Instantiate a box.  No action is taken to make a connection until you try
@@ -95,10 +97,9 @@ class Rush::Box
 
 	# This is called automatically the first time an action is invoked, but you
 	# may wish to call it manually ahead of time in order to have the tunnel
-	# already set up and running.  You can also use this to pass a timeout option,
-	# either :timeout => (seconds) or :timeout => :infinite.
-	def establish_connection(options={})
-		connection.ensure_tunnel(options)
+	# already set up and running.
+	def establish_connection()
+		connection
 	end
 
 	def connection         # :nodoc:
@@ -106,7 +107,15 @@ class Rush::Box
 	end
 
 	def make_connection    # :nodoc:
-		host == 'localhost' ? Rush::Connection::Local.new : Rush::Connection::Remote.new(host)
+		if host == 'localhost'
+			Rush::Connection::Local.new
+		else
+			if @drb.nil?
+				DRb.start_service # FIXME: are we listening on a port? why?
+				@drb = DRbObject.new_with_uri("drbssh://#{self.host}/vagrant/rush/bin/rushd")
+			end
+			@drb.connection
+		end
 	end
 
 	def ==(other)          # :nodoc:

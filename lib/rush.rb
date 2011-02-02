@@ -65,6 +65,7 @@ module Rush::Connection; end
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
+require 'drbssh'
 require 'rush/exceptions'
 require 'rush/config'
 require 'rush/commands'
@@ -81,7 +82,5 @@ require 'rush/array_ext'
 require 'rush/process'
 require 'rush/process_set'
 require 'rush/local'
-require 'rush/remote'
-require 'rush/ssh_tunnel'
 require 'rush/box'
 require 'rush/embeddable_shell'

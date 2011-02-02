@@ -7,13 +7,9 @@ require 'timeout'
 # heart of rush's internals.  (Users of the rush shell or library need never
 # access the connection object directly, so the docs herein are intended for
 # developers wishing to modify rush.)
-#
-# The local connection has a series of methods which do the actual work of
-# modifying files, getting process lists, and so on.  RushServer creates a
-# local connection to handle incoming requests; the translation from a raw hash
-# of parameters to an executed method is handled by
-# Rush::Connection::Local#receive.
 class Rush::Connection::Local
+	include DRbUndumped
+
 	# Write raw bytes to a file.
 	def write_file(full_path, contents)
 		::File.open(full_path, 'w') do |f|
@@ -369,39 +365,6 @@ class Rush::Connection::Local
 
 	# Raised when the action passed in by RushServer is not known.
 	class UnknownAction < Exception; end
-
-	# RushServer uses this method to transform a hash (:action plus parameters
-	# specific to that action type) into a method call on the connection.  The
-	# returned value must be text so that it can be transmitted across the wire
-	# as an HTTP response.
-	def receive(params)
-		case params[:action]
-			when 'write_file'     then write_file(params[:full_path], params[:payload])
-			when 'append_to_file' then append_to_file(params[:full_path], params[:payload])
-			when 'file_contents'  then file_contents(params[:full_path])
-			when 'destroy'        then destroy(params[:full_path])
-			when 'purge'          then purge(params[:full_path])
-			when 'create_dir'     then create_dir(params[:full_path])
-			when 'rename'         then rename(params[:path], params[:name], params[:new_name])
-			when 'copy'           then copy(params[:src], params[:dst])
-			when 'read_archive'   then read_archive(params[:full_path])
-			when 'write_archive'  then write_archive(params[:payload], params[:dir])
-			when 'index'          then index(params[:base_path], params[:glob]).join("\n") + "\n"
-			when 'stat'           then YAML.dump(stat(params[:full_path]))
-			when 'set_access'     then set_access(params[:full_path], Rush::Access.from_hash(params))
-			when 'size'           then size(params[:full_path])
-			when 'processes'      then YAML.dump(processes)
-			when 'process_alive'  then process_alive(params[:pid]) ? '1' : '0'
-			when 'kill_process'   then kill_process(params[:pid].to_i, YAML.load(params[:payload]))
-			when 'bash'           then bash(params[:payload], params[:user], params[:background] == 'true', params[:reset_environment] == 'true')
-		else
-			raise UnknownAction
-		end
-	end
-
-	# No-op for duck typing with remote connection.
-	def ensure_tunnel(options={})
-	end
 
 	# Local connections are always alive.
 	def alive?
