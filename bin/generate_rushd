@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+#
+# Generate +rushd+ by making a self-extracting Ruby-script
+#
+# Read ../lib/rush.rb, suck in all require'd files, add the two lines required
+# to start DRb with a Rush::Box, compress and write to a file.
+#
+
+require 'zlib'
+
+data = []
+
+File.readlines('../lib/rush.rb').each do |line|
+  next if line.match(/^require '(rubygems|rush\/embeddable_shell)'\n/)
+  next if line.match(/^\$LOAD_PATH/)
+
+  if line.match(/require ['"](.+)['"]\n/)
+    data << File.readlines("../lib/#{$1}.rb")
+  else
+    data << line
+  end
+end
+
+data << 'DRb.start_service(ARGV[0], Rush::Box.new("localhost")); DRb.thread.join'
+
+File.open('rushd.standalone', 'w') do |f|
+  f.puts '#!/usr/bin/env ruby -rzlib'
+  f.puts 'eval Zlib::Inflate.inflate DATA.read'
+  f.puts '__END__'
+  f.write Zlib::Deflate.deflate(data.flatten.join(""), Zlib::BEST_COMPRESSION)
+end
