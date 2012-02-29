@@ -39,7 +39,7 @@ class Rush::Connection::Remote
 	end
 
 	def rename(path, name, new_name)
-		transmit(:action => 'rename', :path => path, :name => name, :new_name => 'new_name')
+		transmit(:action => 'rename', :path => path, :name => name, :new_name => new_name)
 	end
 
 	def copy(src, dst)
