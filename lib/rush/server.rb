@@ -19,8 +19,8 @@ class RushHandler < Mongrel::HttpHandler
 		else
 			payload = request.body.read
 
-			without_action = params
-			without_action.delete(params[:action])
+			without_action = params.dup
+			without_action.delete(:action)
 
 			msg = sprintf "%-20s", params[:action]
 			msg += without_action.inspect
