@@ -82,6 +82,10 @@ class Rush::Connection::Remote
 		transmit(:action => 'kill_process', :pid => pid, :payload => YAML.dump(options))
 	end
 
+  def signal_process(pid, signal)
+    transmit(:action => 'signal_process', :pid => pid, :signal => signal)
+  end
+
 	def bash(command, user, background, reset_environment)
 		transmit(:action => 'bash', :payload => command, :user => user, :background => background, :reset_environment => reset_environment)
 	end
