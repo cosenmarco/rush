@@ -1,12 +1,14 @@
 require 'readline'
 
 # Rush::Shell is used to create an interactive shell.  It is invoked by the rush binary.
+# There are 2 types of invocation: #execute(cmd) and #run(). Execute executes a command and exits.
+# run prompts for command and execute them in a loop.
 module Rush
 	class Shell
 		attr_accessor :suppress_output
 		# Set up the user's environment, including a pure binding into which
 		# env.rb and commands.rb are mixed.
-		def initialize
+		def initialize(options)
 			root = Rush::Dir.new('/')
 			home = Rush::Dir.new(ENV['HOME']) if ENV['HOME']
 			pwd = Rush::Dir.new(ENV['PWD']) if ENV['PWD']
