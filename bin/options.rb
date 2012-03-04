@@ -25,6 +25,11 @@ module Rush
         opts.separator ""
         opts.separator "Specific options:"
 
+        opts.on("-f", "--file FILENAME",
+                "Executes the Rush script specified in file") do |f|
+          @options['file'] = f
+        end
+
 
         opts.separator ""
         opts.separator "Common options:"
@@ -47,8 +52,8 @@ module Rush
 
     end
 
-    def command
-      @options['command']
+    def [](key)
+      @options[key] if key.is_a?(String)
     end
 
   end

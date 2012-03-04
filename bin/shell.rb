@@ -14,6 +14,7 @@ module Rush
 			pwd = Rush::Dir.new(ENV['PWD']) if ENV['PWD']
 
 			@config = Rush::Config.new
+                        @options = options
 
 			@config.load_history.each do |item|
 				Readline::HISTORY.push(item)
@@ -49,9 +50,19 @@ module Rush
 			end
 		end
 
+                # Executes the content of a scripting file
+                def execute_script(file)
+                        execute(Rush::File.new(file).contents)
+                end
+
 		# Run the interactive shell using readline.
 		def run
-			loop do
+                        if @options['file']
+                          execute_script @options['file']
+                        elsif @options['command']
+                          execute @options['command']
+                        else
+			  loop do
 				cmd = Readline.readline('rush> ')
 
 				finish if cmd.nil? or cmd == 'exit'
@@ -59,6 +70,7 @@ module Rush
 				Readline::HISTORY.push(cmd)
 
 				execute(cmd)
+                          end
 			end
 		end
 
