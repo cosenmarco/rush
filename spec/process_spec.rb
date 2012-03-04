@@ -38,7 +38,7 @@ describe Rush::Process do
 	end
 
 	it "knows the command line" do
-		@process.cmdline.should match(/process_spec.rb/)
+		@process.cmdline.should match(/spec/)
 	end
 
 	it "knows the memory used" do

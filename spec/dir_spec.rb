@@ -132,11 +132,9 @@ describe Rush::Dir do
 
 	if !RUBY_PLATFORM.match(/darwin/)   # doesn't work on OS X 'cause du switches are different
 		it "knows its size in bytes, which includes its contents recursively" do
-                        dir_size = @dir.size
 			file = @dir.create_file('a')
-                        file_size = file.size
                         file.write('1234')
-			@dir.size.should be(dir_size + file_size)
+			@dir.size.should be(DIR_ENTRY_SIZE + FILE_ENTRY_SIZE + 4)
 		end
 	end
 
