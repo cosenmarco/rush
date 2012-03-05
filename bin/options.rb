@@ -28,7 +28,7 @@ module Rush
         opts.on("-f", "--file FILENAME",
                 "Executes the Rush script specified in file") do |f|
           @options['file'] = f
-        end
+                end
 
 
         opts.separator ""

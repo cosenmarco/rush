@@ -1,3 +1,3 @@
 class String
-	include Rush::HeadTail
+  include Rush::HeadTail
 end

@@ -7,13 +7,13 @@
 #
 #   [ box1['/var/log/access.log'] + box2['/var/log/access.log'] ].search /#{url}/
 class Array
-	include Rush::Commands
+  include Rush::Commands
 
-	def entries
-		self
-	end
+  def entries
+    self
+  end
 
-	include Rush::FindBy
+  include Rush::FindBy
 
-	include Rush::HeadTail
+  include Rush::HeadTail
 end
