@@ -1,9 +1,10 @@
 require File.dirname(__FILE__) + '/base'
-require 'rush/shell'
+require File.dirname(__FILE__) + '/../bin/shell'
+require File.dirname(__FILE__) + '/../bin/options'
 
 describe Rush::Shell do
   before do
-    @shell = Rush::Shell.new
+    @shell = Rush::Shell.new(Rush::RushOptions.new([]))
   end
 
   it "matches open path commands for readline tab completion" do
@@ -19,5 +20,19 @@ describe Rush::Shell do
   it "matches open path commands on instance vars for readline tab completion" do
     @shell.path_parts("@dir['app").should == [ "@dir", "[", "'", "app", "" ]
     @shell.path_parts('@dir/"app').should == [ "@dir", "/", '"', "app", "" ]
+  end
+
+  it "interprets correctly single row commands" do
+    @shell.stub(:readline).and_return("root.ls","exit")
+    @shell.should_receive(:execute).with("root.ls")
+    @shell.interactive_shell
+  end
+
+  it "interprets correctly multiple row commands" do
+    @shell.should_receive(:readline).ordered.with("rush > ").and_return("root.ls\\")
+    @shell.should_receive(:readline).ordered.with("-> ").and_return("home.ls")
+    @shell.should_receive(:readline).ordered.with("rush > ").and_return("exit")
+    @shell.should_receive(:execute).with("root.ls\nhome.ls")
+    @shell.interactive_shell
   end
 end

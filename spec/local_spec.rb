@@ -171,7 +171,7 @@ describe Rush::Connection::Local do
 PID UID   PPID  RSS  CPU COMMAND
 1     0      1 1111   0 cmd1 args
 2   501      1  222   1 cmd2
-    EOPS
+EOPS
     @con.os_x_processes.should == [
       { :pid => "1", :uid => "0", :parent_pid => 1, :mem => 1111, :cpu => 0, :command => "cmd1", :cmdline => "cmd1 args" },
       { :pid => "2", :uid => "501", :parent_pid => 1, :mem => 222, :cpu => 1, :command => "cmd2", :cmdline => "cmd2" },

@@ -1,11 +1,15 @@
 require 'readline'
+require File.dirname(__FILE__) + '/../lib/rush'
 
 # Rush::Shell is used to create an interactive shell.  It is invoked by the rush binary.
-# There are 2 types of invocation: #execute(cmd) and #run(). Execute executes a command and exits.
-# run prompts for command and execute them in a loop.
+# There are 2 types of invocation: #execute(cmd) and #run(). The first executes a command and exits.
+# The latter prompts for command and execute them in a loop or loads and executes a script (depending on options).
 module Rush
   class Shell
+    DEFAULT_PROMPT = 'rush > '
+    MULTILINE_PROMPT = '-> '
     attr_accessor :suppress_output
+
     # Set up the user's environment, including a pure binding into which
     # env.rb and commands.rb are mixed.
     def initialize(options)
@@ -35,6 +39,58 @@ module Rush
       Array.class_eval commands
     end
 
+    # Run the interactive shell using readline.
+    # Or if specified in @options runs a rush script and exits
+    # Or if specified in options
+    def run
+      if @options['file']
+        execute_script @options['file']
+      elsif @options['command']
+        execute @options['command']
+      else
+        interactive_shell
+        puts 
+      end
+    end
+
+    # A stub for the readline handler. At the moment it is implemented with the
+    # Readline stdlib class.
+    def readline(p); Readline.readline(p); end
+
+    # The main commands loop for the interactive shell
+    def interactive_shell
+      final_cmd = ""
+      prompt = DEFAULT_PROMPT
+      loop do
+        cmd = readline(prompt)
+
+        case cmd
+        when "", "\\"
+          next
+        when "exit", nil
+          finish
+          break
+        when /.?\\$/
+          final_cmd += cmd.sub(/\\$/,"\n")
+          prompt = MULTILINE_PROMPT
+          Readline::HISTORY.push(cmd)
+          next
+        else
+          final_cmd += cmd
+          Readline::HISTORY.push(cmd)
+        end
+
+        execute(final_cmd)
+        final_cmd = ""
+        prompt = DEFAULT_PROMPT
+      end
+    end
+
+    # Executes the content of a scripting file
+    def execute_script(file)
+      execute(Rush::File.new(file).contents)
+    end
+
     # Run a single command.
     def execute(cmd)
       res = eval(cmd, @pure_binding)
@@ -50,35 +106,10 @@ module Rush
       end
     end
 
-    # Executes the content of a scripting file
-    def execute_script(file)
-      execute(Rush::File.new(file).contents)
-    end
-
-    # Run the interactive shell using readline.
-    def run
-      if @options['file']
-        execute_script @options['file']
-      elsif @options['command']
-        execute @options['command']
-      else
-        loop do
-          cmd = Readline.readline('rush> ')
-
-          finish if cmd.nil? or cmd == 'exit'
-          next if cmd == ""
-          Readline::HISTORY.push(cmd)
-
-          execute(cmd)
-        end
-      end
-    end
 
     # Save history to ~/.rush/history when the shell exists.
     def finish
       @config.save_history(Readline::HISTORY.to_a)
-      puts
-      exit
     end
 
     # Nice printing of different return types, particularly Rush::SearchResults.
