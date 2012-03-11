@@ -7,6 +7,10 @@ describe Rush::Shell do
     @shell = Rush::Shell.new(Rush::RushOptions.new([]))
   end
 
+  after do
+    @shell.clear_history
+  end
+
   it "matches open path commands for readline tab completion" do
     @shell.path_parts("dir['app").should == [ "dir", "[", "'", "app", "" ]
     @shell.path_parts('dir/"app').should == [ "dir", "/", '"', "app", "" ]

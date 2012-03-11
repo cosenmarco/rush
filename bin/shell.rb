@@ -57,6 +57,11 @@ module Rush
     # Readline stdlib class.
     def readline(p); Readline.readline(p); end
 
+    # Clears the command history
+    def clear_history
+      Readline::HISTORY.drop Readline::HISTORY.size
+    end
+
     # The main commands loop for the interactive shell
     def interactive_shell
       final_cmd = ""

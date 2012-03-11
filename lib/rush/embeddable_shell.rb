@@ -7,8 +7,8 @@ module Rush
   # Delegates unknown method calls to a Rush::Shell instance
   class EmbeddableShell
     attr_accessor :shell
-    def initialize(suppress_output = true)
-      self.shell = Rush::Shell.new
+    def initialize(suppress_output = true, options = RushOptions.new([]))
+      self.shell = Rush::Shell.new(options)
       shell.suppress_output = suppress_output
     end
 
