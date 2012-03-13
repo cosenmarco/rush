@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 	s.require_paths    = ["lib"]
 	s.extra_rdoc_files = %w(README.rdoc)
 
+	s.add_development_dependency "rake"
 	s.add_development_dependency "rspec", ["~> 2.1.0"]
 	s.add_development_dependency "rcov"
 	s.add_development_dependency "yard",  ["~> 0.6.0"]
