@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/base'
-require File.dirname(__FILE__) + '/../bin/options'
+require File.dirname(__FILE__) + '/../lib/rush/options'
 
 describe Rush::RushOptions do
   it "parses correctly the command if given in the command line" do

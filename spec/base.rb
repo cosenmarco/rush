@@ -1,5 +1,6 @@
 require 'rubygems'
-#require 'spec'
+require 'rspec'
+
 FILE_ENTRY_SIZE = 20      # This is the file descriptor size as reported by du -sb for an empty file that stays in an empty dir.
 DIR_ENTRY_SIZE = 40      # This is the dir descriptor size as reported by du -sb for an empty dir.
 

@@ -1,5 +1,5 @@
 require 'optparse'
-require File.dirname(__FILE__) + '/../lib/rush/version'
+require 'rush/version'
 
 # This class is responsible of parsing correctly the command line
 module Rush

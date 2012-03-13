@@ -1,5 +1,5 @@
 require 'readline'
-require File.dirname(__FILE__) + '/../lib/rush'
+require 'rush'
 
 # Rush::Shell is used to create an interactive shell.  It is invoked by the rush binary.
 # There are 2 types of invocation: #execute(cmd) and #run(). The first executes a command and exits.
