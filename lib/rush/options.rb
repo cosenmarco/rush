@@ -16,7 +16,7 @@ module Rush
       OptionParser.new do |opts|
         opts.banner = <<-BAN
 
-        Usage: rush [options] [--] [command]"
+        Usage: rush [options] [--] [command]
 
         When called without options a prompt is displayed.
         -- denotes the end of the options.
