@@ -17,6 +17,8 @@ module Rush
       home = Rush::Dir.new(ENV['HOME']) if ENV['HOME']
       pwd = Rush::Dir.new(ENV['PWD']) if ENV['PWD']
 
+      @pwd = pwd
+
       @config = Rush::Config.new
       @options = options
 
@@ -93,7 +95,8 @@ module Rush
 
     # Executes the content of a scripting file
     def execute_script(file)
-      execute(Rush::File.new(file).contents)
+      abspath = ::File.expand_path(file,@pwd.full_path)
+      execute(Rush::File.new(abspath).contents)
     end
 
     # Run a single command.

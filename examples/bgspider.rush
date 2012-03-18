@@ -1,0 +1,13 @@
+# Gets the wallpapers from /usr/share/wallpapers and links the appropriate 
+# files in the ~/.backgrounds folder to setup a slideshow within awesome
+
+# Usage: rush -f bgspider.rush 
+
+# Set the resolution
+res = "1600x1200"
+['.jpg','.png'].each do |ext|
+  root["usr/share/wallpapers/"].dirs.each do |dir| 
+    f = dir["contents/images/#{res}" + ext]
+    bash "ln -s #{f.full_path} #{home[".backgrounds/" + dir.name + ext]}" if (f.exists? && ! f.dir? )
+  end
+end
