@@ -61,7 +61,9 @@ module Rush
 
     # Clears the command history
     def clear_history
-      Readline::HISTORY.drop Readline::HISTORY.size
+      while ! Readline::HISTORY.empty? do
+        Readline::HISTORY.pop
+      end
     end
 
     # The main commands loop for the interactive shell
